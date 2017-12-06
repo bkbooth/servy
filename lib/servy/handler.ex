@@ -58,7 +58,7 @@ defmodule Servy.Handler do
     """
     HTTP/1.1 #{conv.status} #{status_reason(conv.status)}
     Content-Type: text/html
-    Content-Length: #{byte_size(conv.resp_body)}
+    Content-Length: #{String.length(conv.resp_body)}
 
     #{conv.resp_body}
     """
