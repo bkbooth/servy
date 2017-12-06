@@ -1,3 +1,5 @@
+require Logger
+
 defmodule Servy.Handler do
   def handle(request) do
     request
@@ -10,7 +12,7 @@ defmodule Servy.Handler do
   end
 
   def track(%{ status: 404, path: path } = conv) do
-    IO.puts "Warning: #{path} is on the loose!"
+    Logger.warn "#{path} is on the loose!"
     conv
   end
 
