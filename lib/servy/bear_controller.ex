@@ -16,7 +16,7 @@ defmodule Servy.BearController do
 
   def index(conv) do
     bears =
-      Wildthings.list_bears
+      Wildthings.list_bears()
       |> Enum.sort(&Bear.order_asc_by_name/2)
 
     render(conv, "index.eex", bears: bears)
