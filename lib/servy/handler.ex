@@ -38,6 +38,10 @@ defmodule Servy.Handler do
     BearController.create(conv, conv.params)
   end
 
+  def route(%Conv{ method: "DELETE", path: "/bears/" <> _id } = conv) do
+    BearController.delete(conv, conv.params)
+  end
+
   def route(%Conv{ method: "GET", path: "/about" } = conv) do
     @pages_path
     |> Path.join("about.html")
@@ -71,3 +75,15 @@ defmodule Servy.Handler do
     """
   end
 end
+
+request = """
+DELETE /bears/1 HTTP/1.1
+Host: example.com
+User-Agent: ExampleBrowser/1.0
+Accept: */*
+
+"""
+
+response = Servy.Handler.handle(request)
+
+IO.puts response
