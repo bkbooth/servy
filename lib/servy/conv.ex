@@ -3,19 +3,9 @@ defmodule Servy.Conv do
             path: "",
             params: %{},
             headers: %{},
-            resp_headers: %{ "Content-Type" => "text/html" },
+            resp_content_type: "text/html",
             resp_body: "",
             status: nil
-
-  def put_resp_content_type(conv, content_type) do
-    headers = Map.put(conv.resp_headers, "Content-Type", content_type)
-    %{ conv | resp_headers: headers }
-  end
-
-  def put_content_length(conv) do
-    headers = Map.put(conv.resp_headers, "Content-Length", String.length(conv.resp_body))
-    %{ conv | resp_headers: headers }
-  end
 
   def full_status(conv) do
     "#{conv.status} #{status_reason(conv.status)}"

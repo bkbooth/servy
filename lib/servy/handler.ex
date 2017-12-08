@@ -9,7 +9,6 @@ defmodule Servy.Handler do
 
   import Servy.Plugins, only: [rewrite_path: 1, log: 1, track: 1]
   import Servy.Parser, only: [parse: 1]
-  import Servy.Conv, only: [put_content_length: 1]
 
   @doc "Transforms the request into a response"
   def handle(request) do
@@ -19,7 +18,6 @@ defmodule Servy.Handler do
     |> log
     |> route
     |> track
-    |> put_content_length
     |> format_response
   end
 
@@ -70,15 +68,10 @@ defmodule Servy.Handler do
   def format_response(%Conv{} = conv) do
     """
     HTTP/1.1 #{Conv.full_status(conv)}\r
-    #{format_response_headers(conv)}
+    Content-Type: #{conv.resp_content_type}\r
+    Content-Length: #{String.length(conv.resp_body)}\r
     \r
     #{conv.resp_body}
     """
-  end
-
-  def format_response_headers(%Conv{} = conv) do
-    for { key, value } <- conv.resp_headers do
-      "#{key}: #{value}\r"
-    end |> Enum.sort |> Enum.reverse |> Enum.join("\n")
   end
 end
