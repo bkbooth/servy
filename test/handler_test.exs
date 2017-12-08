@@ -147,6 +147,36 @@ defmodule HandlerTest do
     """
   end
 
+  test "GET /about" do
+    request = """
+    GET /about HTTP/1.1\r
+    Host: example.com\r
+    User-Agent: ExampleBrowser/1.0\r
+    Accept: */*\r
+    \r
+    """
+
+    response = handle(request)
+
+    expected_response = """
+    HTTP/1.1 200 OK\r
+    Content-Type: text/html\r
+    Content-Length: 330\r
+    \r
+    <h1>Clark's Wildthings Refuge</h1>
+
+    <blockquote>
+      When we contemplate the whole globe as one great dewdrop,
+      striped and dotted with continents and islands, flying through
+      space with other stars all singing and shining together as one,
+      the whole universe appears as an infinite storm of beauty.
+      -- John Muir
+    </blockquote>
+    """
+
+    assert remove_whitespace(response) == remove_whitespace(expected_response)
+  end
+
   defp remove_whitespace(text) do
     String.replace(text, ~r{\s}, "")
   end
