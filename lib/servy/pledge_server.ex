@@ -23,6 +23,12 @@ defmodule Servy.PledgeServer do
     receive do {:response, pledges} -> pledges end
   end
 
+  def total_pledged do
+    send @name, {self(), :total_pledged}
+
+    receive do {:response, total} -> total end
+  end
+
   # Server
 
   def listen_loop(state) do
@@ -36,6 +42,10 @@ defmodule Servy.PledgeServer do
       {sender, :recent_pledges} ->
         send sender, {:response, state}
         listen_loop(state)
+      {sender, :total_pledged} ->
+        total = Enum.map(state, &elem(&1, 1)) |> Enum.sum
+        send sender, {:response, total}
+        listen_loop(state)
     end
   end
 
@@ -46,14 +56,16 @@ defmodule Servy.PledgeServer do
 
 end
 
-# alias Servy.PledgeServer
+alias Servy.PledgeServer
 
-# pid = PledgeServer.start()
+pid = PledgeServer.start()
 
-# IO.inspect PledgeServer.create_pledge("larry", 10)
-# IO.inspect PledgeServer.create_pledge("mo", 20)
-# IO.inspect PledgeServer.create_pledge("curly", 30)
-# IO.inspect PledgeServer.create_pledge("daisy", 40)
-# IO.inspect PledgeServer.create_pledge("grace", 50)
+IO.inspect PledgeServer.create_pledge("larry", 10)
+IO.inspect PledgeServer.create_pledge("mo", 20)
+IO.inspect PledgeServer.create_pledge("curly", 30)
+IO.inspect PledgeServer.create_pledge("daisy", 40)
+IO.inspect PledgeServer.create_pledge("grace", 50)
 
-# IO.inspect PledgeServer.recent_pledges()
+IO.inspect PledgeServer.recent_pledges()
+
+IO.inspect PledgeServer.total_pledged()
