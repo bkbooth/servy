@@ -29,6 +29,11 @@ defmodule Servy.SensorServer do
     {:noreply, new_state}
   end
 
+  def handle_info(unexpected, state) do
+    IO.puts "Can't touch this! #{inspect unexpected}"
+    {:noreply, state}
+  end
+
   def handle_call(:get_sensor_data, _from, state) do
     {:reply, state, state}
   end
