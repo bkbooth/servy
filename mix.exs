@@ -17,6 +17,7 @@ defmodule Servy.Mixfile do
     [
       extra_applications: [:logger],
       mod: {Servy, []},
+      env: [port: 4000],
     ]
   end
 
